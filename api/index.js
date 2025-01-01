@@ -91,8 +91,8 @@ app.post("/api/login", async (req, res) => {
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { algorithm: "HS256", expiresIn: "1h" });
     res.json({ token });
   } catch (error) {
-    console.error("Failed to login:", error);
-    res.status(500).json({ error: "Failed to login", token });
+    console.error("Failed to login:ss", error);
+    res.status(500).json({ error: "Failed to loginsss", token });
   }
 });
 
