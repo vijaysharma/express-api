@@ -6,5 +6,16 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [{ "src": "/api/(.*)", "dest": "api/index.js" }]
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.js"
+    }
+  ],
+  "env": {
+    "BLOB_READ_WRITE_TOKEN": {
+      "description": "vercel_blob_rw_VPMtMUdKeUMeU6vM_x9CIOs4BuV8xqmOGkAizbYybbZyGol",
+      "required": true
+    }
+  }
 }

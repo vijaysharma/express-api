@@ -28,16 +28,6 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, "api/data"),
-          to: path.resolve(__dirname, "dist/data"),
-        },
-      ],
-    }),
-  ],
 };
 
 export default config;
