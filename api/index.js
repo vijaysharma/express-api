@@ -5,6 +5,10 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -188,4 +192,4 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Export for Vercel
-module.exports = app;
+export default app;

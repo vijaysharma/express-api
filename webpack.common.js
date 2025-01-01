@@ -1,13 +1,17 @@
-const path = require("path");
-const nodeExternals = require("webpack-node-externals");
-const CopyPlugin = require("copy-webpack-plugin");
+import path from "path";
+import nodeExternals from "webpack-node-externals";
+import CopyPlugin from "copy-webpack-plugin";
+import { fileURLToPath } from "url";
 
-module.exports = {
-  entry: "./src/server.js",
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const config = {
+  entry: "./api/index.js",
   target: "node",
   externals: [nodeExternals()],
   output: {
-    filename: "server.js",
+    filename: "index.js",
     path: path.resolve(__dirname, "dist"),
   },
   module: {
@@ -28,10 +32,12 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, "src/data"),
+          from: path.resolve(__dirname, "api/data"),
           to: path.resolve(__dirname, "dist/data"),
         },
       ],
     }),
   ],
 };
+
+export default config;
