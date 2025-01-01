@@ -92,7 +92,7 @@ app.post("/api/login", async (req, res) => {
     res.json({ token });
   } catch (error) {
     console.error("Failed to login:ss", error);
-    res.status(500).json({ error: "Failed to loginsss", token });
+    res.status(500).json({ error: "Failed to loginsssss", token });
   }
 });
 
