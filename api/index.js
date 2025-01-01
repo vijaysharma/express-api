@@ -22,18 +22,10 @@ const client = new Client({
 });
 
 // Connect to database
-let isConnected = false;
-
 client
   .connect()
-  .then(() => {
-    console.log("Database connected successfully");
-    isConnected = true;
-  })
-  .catch((err) => {
-    console.error("Initial database connection failed:", err);
-    isConnected = false;
-  });
+  .then(() => console.log("Database connected"))
+  .catch((err) => console.error("Database connection error:", err));
 
 // Middleware to enable CORS
 app.use(cors());
@@ -94,46 +86,39 @@ app.post("/api/register", async (req, res) => {
 
 // Login user
 app.post("/api/login", async (req, res) => {
-  if (!isConnected) {
-    console.error("Database not connected");
-    return res.status(500).json({ error: "Database connection error" });
-  }
-
   try {
     const { username, password } = req.body;
-    console.log(`Login attempt for user: ${username}`);
+
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password are required" });
+    }
 
     const result = await client.query("SELECT * FROM users WHERE username = $1", [username]);
-    console.log(`Query result rows: ${result.rows.length}`);
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "User not found" });
     }
 
     const user = result.rows[0];
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Invalid password" });
     }
 
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "1h" });
 
     return res.json({ token });
   } catch (error) {
-    console.error("Login error:", {
+    console.error("Login error details:", {
       message: error.message,
-      code: error.code,
       stack: error.stack,
+      code: error.code,
     });
 
-    if (error.code === "ECONNREFUSED") {
-      return res.status(500).json({ error: "Database connection failed" });
-    }
-
     return res.status(500).json({
-      error: "Database error",
-      details: error.message,
+      error: "Internal server error",
+      details: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });
