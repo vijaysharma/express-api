@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const POSTS_FILE = path.join(__dirname, "data", "posts.json");
 const USERS_FILE = path.join(__dirname, "data", "users.json");
 const JWT_SECRET = process.env.JWT_SECRET; // Replace this with a secure secret
@@ -24,8 +24,8 @@ app.use(express.json());
 app.get("/api/test", (req, res) => {
   res.json({ message: "API is /test working" });
 });
-app.get("/api", (req, res) => {
-  res.json({ message: "API at / is working" });
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello! How are you doing today?" });
 });
 
 // Middleware to verify JWT token
@@ -182,11 +182,10 @@ app.use((err, req, res, next) => {
 });
 
 if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 }
 
 // Export for Vercel
-export default app;
+module.exports = app;
